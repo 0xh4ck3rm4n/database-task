@@ -1,52 +1,63 @@
-# Database Task (Normalization)
+# Database Normalization Lab
 
-This is a lab demonstration for database normalization from unnormalized form to 3NF.
+> A class task to demonstrate database normalization from unnormalized table to a organized third normal form structure
 
-## Learning Objectives
+![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?logo=mysql)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)
+![License](https://img.shields.io/badge/License-Educational-green)
 
-- Understand normalization (1NF, 2NF, 3NF)
-- Write DDL Commands
-- Verifying with queries
-- Github Documentation
+---
 
-## Quick Start
+## Learning Objective
 
-### 1. Clone the Repository
+You can learn the following things:
 
-```
+- ✅ **Problem Identification**: Identify problems in unnormalized data
+- ✅ **Normalization**: Organizing data
+- ✅ **SQL Commands**: Writing DDL
+- ✅ **Verification**: Testing your database with queries
+
+---
+
+## Quick Start Guide
+
+### Step 1: Get the Code
+
+```bash
 git clone git@github.com:0xh4ck3rm4n/database-task.git
 cd database-task
 ```
 
-### 2. Start MySQL Docker Container
+### Step 2: Start MySQL with Docker
 
-```
+```bash
 docker run --name lab \
   -e MYSQL_ROOT_PASSWORD=lab \
-  -e MYSQL_DATABASE=university \
+  -e MYSQL_DATABASE=uni \
   -d -p 3307:3306 \
   mysql:8.0
 ```
 
-### 3. Execute the Complete Demo Script
+> **What this does:** Creates a MySQL database running in a container on port 3307
 
+### Step 3: Load the Database
+
+```bash
+docker exec -i lab mysql -uroot -plab uni < sql/university.sql
 ```
-docker exec -i lab mysql -uroot -plab uni < university.sql
-```
 
-### 4. Verifying the result
+> **What this does:** Runs all the SQL commands to create and populate your database
 
-```
-# Check Student table
+### Step 4: Check It Works
 
+```bash
+# View all students
 docker exec lab mysql -uroot -plab -t uni -e "SELECT * FROM Students;"
 
-# Check Courses table
-
+# View all courses
 docker exec lab mysql -uroot -plab -t uni -e "SELECT * FROM Courses;"
 
-# List all enrollment
-
+# See who's taking what courses
 docker exec lab mysql -uroot -plab -t uni -e "
     SELECT
         s.Name AS Student,
@@ -59,64 +70,80 @@ docker exec lab mysql -uroot -plab -t uni -e "
     ORDER BY s.Name;"
 ```
 
-## Normalization Process
+---
 
-### Original Unnormalized Form
-
-```
-Registration(StudentID, Name, Email, Major, Advisor, CourseID,
-             CourseTitle, Credits, Grade, Building, Room)
-```
-
-**Problems**: Redundancy, update anomalies, insertion anomalies, deletion anomalies
+## Understanding Normalization
 
 ### First Normal Form (1NF)
 
-**All attributes are atomic**
+**Rule:** Each cell has atomic value
+
+✅ The table given for the task already satisfies 1NF
 
 ### Second Normal Form (2NF)
 
-**Eliminated partial dependencies by separating:**
+**Rule:** Remove partial dependencies
 
-- Student data → **Students** table
-- Course data → **Courses** table
-- Enrollment data → **Enrollments** table
+**What I did:**
+
+- Separated **student data** into Students table
+- Separated **course data** into Courses table
+- Kept **enrollments** separate with just the relationship
 
 ### Third Normal Form (3NF)
 
-**Eliminated transitive dependencies by creating:**
+**Rule:** Remove transitive dependencies
 
-- **Majors** table (Major → Advisor)
+**What I did:**
+
+- Created **Majors table** because Advisor depends on Major, not StudentID
+- Now changing an advisor only requires updating one row
+
+---
 
 ## Task Structure
 
 ```
 database-task/
-├── images/
-│   ├── 1.png
-│   ├── 2.png
-│   ├── 3.png
+├── images/              # Screenshots of results
+│   ├── 1.png           # Show tables output
+│   ├── 2.png           # Students table data
+│   └── 3.png           # Full join query result
 ├── sql/
-│   ├── university.sql          # DDL Queries
-└── README.md                   # Documentation
+│   └── university.sql  # Complete database script
+└── README.md           # You are here!
 ```
 
-## Verification and Testing
+---
+
+## Results
+
+### Check Your Tables
 
 ```sql
-USE lab;
+USE uni;
 SHOW TABLES;
 ```
 
-Expected output:
-<img src="/images/1.png" width="500" height="500" />
+**You should see:**
+
+<img src="images/1.png" alt="Tables list" width="500"/>
+
+---
+
+### View Student Data
 
 ```sql
 SELECT * FROM Students;
 ```
 
-Expected Output:
-<img src="/images/2.png" width="500" height="500" />
+**Output:**
+
+<img src="images/2.png" alt="Students table" width="500"/>
+
+---
+
+### The Big Picture (Joining Everything)
 
 ```sql
 SELECT
@@ -137,33 +164,94 @@ JOIN Enrollments e ON s.StudentID = e.StudentID
 JOIN Courses c ON e.CourseID = c.CourseID;
 ```
 
-Expected Output:
-<img src="/images/3.png" width="500" height="500" />
+**This proves normalization works!** We can still get all the original data by joining tables.
 
-## Testing Data Integrity
+<img src="images/3.png" alt="Full join result" width="500"/>
 
-### Test 1: Try to add duplicate email
+---
+
+## Testing Conditions
+
+### ❌ Test 1: Can't Use Same Email Twice
 
 ```sql
-INSERT INTO Students VALUES
-    ('S105', 'Eve', 'alice@uni.edu', 'CS');
--- Error: Duplicate entry 'alice@uni.edu' for key 'Email'
+INSERT INTO Students VALUES ('S105', 'Eve', 'alice@uni.edu', 'CS');
 ```
 
-### Test 2: Try to enroll in non-existent course
+**Error:** `Duplicate entry 'alice@uni.edu' for key 'Email'`
+
+✅ **Why this is good:** Prevents duplicate accounts
+
+---
+
+### ❌ Test 2: Can't Enroll in Fake Course
 
 ```sql
 INSERT INTO Enrollments VALUES ('S101', 'BIO101', 'A');
--- Error: Foreign key constraint fails
 ```
 
-### Test 3: Try to delete a major with students
+**Error:** `Foreign key constraint fails`
+
+✅ **Why this is good:** You can only enroll in real courses
+
+---
+
+### ❌ Test 3: Can't Delete Major with Students
 
 ```sql
 DELETE FROM Majors WHERE Major = 'CS';
--- Error: Cannot delete due to foreign key constraint
 ```
 
-## Author
+**Error:** `Cannot delete due to foreign key constraint`
 
-**Gaurav Poudel** - Student
+✅ **Why this is good:** Protects student data from accidental deletion
+
+---
+
+## Commands
+
+### Access MySQL Shell
+
+```bash
+docker exec -it lab mysql -uroot -plab uni
+```
+
+### Stop the Container
+
+```bash
+docker stop lab
+```
+
+### Start Again Later
+
+```bash
+docker start lab
+```
+
+### Remove Everything
+
+```bash
+docker stop lab
+docker rm lab
+```
+
+---
+
+## 👨‍💻 Author
+
+**Gaurav Poudel**  
+Student
+
+---
+
+## 📄 License
+
+This task is for educational purposes. You can use it!
+
+---
+
+<div align="center">
+
+**I see you taking a peek A booo!**
+
+</div>
