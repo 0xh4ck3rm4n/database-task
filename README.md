@@ -1,4 +1,4 @@
-## Database Task (Normalization)
+# Database Task (Normalization)
 
 This is a lab demonstration for database normalization from unnormalized form to 3NF.
 
