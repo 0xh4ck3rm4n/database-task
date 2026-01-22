@@ -72,11 +72,11 @@ Registration(StudentID, Name, Email, Major, Advisor, CourseID,
 
 ### First Normal Form (1NF)
 
-✅ All attributes are atomic
+**All attributes are atomic**
 
 ### Second Normal Form (2NF)
 
-✅ Eliminated partial dependencies by separating:
+**Eliminated partial dependencies by separating:**
 
 - Student data → **Students** table
 - Course data → **Courses** table
@@ -84,7 +84,7 @@ Registration(StudentID, Name, Email, Major, Advisor, CourseID,
 
 ### Third Normal Form (3NF)
 
-✅ Eliminated transitive dependencies by creating:
+**Eliminated transitive dependencies by creating:**
 
 - **Majors** table (Major → Advisor)
 
@@ -109,14 +109,14 @@ SHOW TABLES;
 ```
 
 Expected output:
-![Tables](/images/1.png)
+<img src="/images/1.png" width="200" height="150" />
 
 ```sql
 SELECT * FROM Students;
 ```
 
 Expected Output:
-![Students Table](/images/2.png)
+<img src="/images/2.png" width="200" height="150" />
 
 ```sql
 SELECT
@@ -138,7 +138,7 @@ JOIN Courses c ON e.CourseID = c.CourseID;
 ```
 
 Expected Output:
-![Joined Table](/images/3.png)
+<img src="/images/3.png" width="200" height="150" />
 
 ## Testing Data Integrity
 
