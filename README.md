@@ -86,9 +86,9 @@ docker exec lab mysql -uroot -plab -t uni -e "
 
 **What I did:**
 
-- Separated **student data** into Students table
-- Separated **course data** into Courses table
-- Kept **enrollments** separate with just the relationship
+  1. Separated **student data** into Students table
+  2. Separated **course data** into Courses table
+  3. Kept **enrollments** separate with just the relationship
 
 ### Third Normal Form (3NF)
 
@@ -96,8 +96,8 @@ docker exec lab mysql -uroot -plab -t uni -e "
 
 **What I did:**
 
-- Created **Majors table** because Advisor depends on Major, not StudentID
-- Now changing an advisor only requires updating one row
+  1. Created **Majors table** because Advisor depends on Major, not StudentID
+  2. Now changing an advisor only requires updating one row
 
 ---
 
@@ -143,7 +143,7 @@ SELECT * FROM Students;
 
 ---
 
-### The Big Picture (Joining Everything)
+### Joining Everything
 
 ```sql
 SELECT
@@ -182,7 +182,7 @@ INSERT INTO Students VALUES ('S105', 'Eve', 'alice@uni.edu', 'CS');
 
 ✅ **Why this is good:** Prevents duplicate accounts
 
----
+
 
 ### Test 2: Can't Enroll in Fake Course
 
@@ -194,7 +194,7 @@ INSERT INTO Enrollments VALUES ('S101', 'BIO101', 'A');
 
 ✅ **Why this is good:** You can only enroll in real courses
 
----
+
 
 ### Test 3: Can't Delete Major with Students
 
