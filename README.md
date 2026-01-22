@@ -4,17 +4,59 @@ This is a lab demonstration for database normalization from unnormalized form to
 
 ## Learning Objectives
 
-- ✅ Understand normalization (1NF, 2NF, 3NF)
-- ✅ Writing efficient SQL DDL commands
-- ✅ Verifying data integrity through JOIN operations
+- Understand normalization (1NF, 2NF, 3NF)
+- Write DDL Commands
+- Verifying with queries
+- Github Documentation
 
-## Task Structure
+## Quick Start
+
+### 1. Clone the Repository
 
 ```
-database-task/
-├── sql/
-│   ├── university.sql          # DDL Queries
-└── README.md                   # Documentation
+git clone git@github.com:0xh4ck3rm4n/database-task.git
+cd database-task
+```
+
+### 2. Start MySQL Docker Container
+
+```
+docker run --name lab \
+  -e MYSQL_ROOT_PASSWORD=lab \
+  -e MYSQL_DATABASE=university \
+  -d -p 3307:3306 \
+  mysql:8.0
+```
+
+### 3. Execute the Complete Demo Script
+
+```
+docker exec -i lab mysql -uroot -plab uni < university.sql
+```
+
+### 4. Verifying the result
+
+```
+# Check Student table
+
+docker exec lab mysql -uroot -plab -t uni -e "SELECT * FROM Students;"
+
+# Check Courses table
+
+docker exec lab mysql -uroot -plab -t uni -e "SELECT * FROM Courses;"
+
+# List all enrollment
+
+docker exec lab mysql -uroot -plab -t uni -e "
+    SELECT
+        s.Name AS Student,
+        c.CourseTitle AS Course,
+        e.Grade,
+        c.Credits
+    FROM Enrollments e
+    JOIN Students s ON e.StudentID = s.StudentID
+    JOIN Courses c ON e.CourseID = c.CourseID
+    ORDER BY s.Name;"
 ```
 
 ## Normalization Process
@@ -46,30 +88,20 @@ Registration(StudentID, Name, Email, Major, Advisor, CourseID,
 
 - **Majors** table (Major → Advisor)
 
-## Quick Start
+## Task Structure
 
-### Prerequisites
-
-- MySQL 5.7+ or MariaDB
-- Database client (MySQL Workbench, phpMyAdmin, or CLI)
-
-### Installation
-
-1. **Connect to your MySQL server**
-
-```bash
-mysql -u root -p
+```
+database-task/
+├── images/
+│   ├── 1.png
+│   ├── 2.png
+│   ├── 3.png
+├── sql/
+│   ├── university.sql          # DDL Queries
+└── README.md                   # Documentation
 ```
 
-2. **Execute the SQL script**
-
-```bash
-mysql -u root -p < university.sql
-```
-
-Or copy and paste the entire script into your SQL client.
-
-3. **Verify the setup**
+## Verification and Testing
 
 ```sql
 USE lab;
@@ -77,69 +109,14 @@ SHOW TABLES;
 ```
 
 Expected output:
-
-```
-+-----------------+
-| Tables_in_lab   |
-+-----------------+
-| Courses         |
-| Enrollments     |
-| Majors          |
-| Students        |
-+-----------------+
-```
-
-### View All Students with Their Advisors
+![Tables](/images/1.png)
 
 ```sql
-SELECT
-    s.StudentID,
-    s.Name,
-    s.Major,
-    m.Advisor
-FROM Students s
-JOIN Majors m ON s.Major = m.Major;
+SELECT * FROM Students;
 ```
 
-### List All Course Enrollments
-
-```sql
-SELECT
-    s.Name AS Student,
-    c.CourseTitle AS Course,
-    e.Grade,
-    c.Credits
-FROM Enrollments e
-JOIN Students s ON e.StudentID = s.StudentID
-JOIN Courses c ON e.CourseID = c.CourseID
-ORDER BY s.Name;
-```
-
-### Find Students by Major
-
-```sql
-SELECT
-    s.StudentID,
-    s.Name,
-    s.Email
-FROM Students s
-WHERE s.Major = 'CS';
-```
-
-### Calculate Total Credits by Student
-
-```sql
-SELECT
-    s.StudentID,
-    s.Name,
-    SUM(c.Credits) AS TotalCredits
-FROM Students s
-JOIN Enrollments e ON s.StudentID = e.StudentID
-JOIN Courses c ON e.CourseID = c.CourseID
-GROUP BY s.StudentID, s.Name;
-```
-
-### Verification Query (Reconstruct Original Data)
+Expected Output:
+![Students Table](/images/2.png)
 
 ```sql
 SELECT
@@ -160,35 +137,10 @@ JOIN Enrollments e ON s.StudentID = e.StudentID
 JOIN Courses c ON e.CourseID = c.CourseID;
 ```
 
-## Adding New Data
+Expected Output:
+![Joined Table](/images/3.png)
 
-### Add a New Major
-
-```sql
-INSERT INTO Majors VALUES ('Mathematics', 'Dr. Johnson');
-```
-
-### Add a New Student
-
-```sql
-INSERT INTO Students VALUES
-    ('S104', 'David', 'david@uni.edu', 'Mathematics');
-```
-
-### Add a New Course
-
-```sql
-INSERT INTO Courses VALUES
-    ('MATH301', 'Calculus III', 4, 'Math Wing', '203');
-```
-
-### Enroll a Student in a Course
-
-```sql
-INSERT INTO Enrollments VALUES ('S104', 'MATH301', 'A');
-```
-
-## 🧪 Testing Data Integrity
+## Testing Data Integrity
 
 ### Test 1: Try to add duplicate email
 
@@ -212,29 +164,6 @@ DELETE FROM Majors WHERE Major = 'CS';
 -- Error: Cannot delete due to foreign key constraint
 ```
 
-## 🔄 Database Maintenance
-
-### View Table Structure
-
-```sql
-DESCRIBE Students;
-DESCRIBE Majors;
-DESCRIBE Courses;
-DESCRIBE Enrollments;
-```
-
-### Check Foreign Key Relationships
-
-```sql
-SELECT
-    TABLE_NAME,
-    CONSTRAINT_NAME,
-    REFERENCED_TABLE_NAME
-FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-WHERE TABLE_SCHEMA = 'lab'
-AND REFERENCED_TABLE_NAME IS NOT NULL;
-```
-
 ## Author
 
-**0xh4ck3rm4n**
+**Gaurav Poudel** - Student
