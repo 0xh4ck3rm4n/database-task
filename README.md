@@ -180,7 +180,7 @@ INSERT INTO Students VALUES ('S105', 'Eve', 'alice@uni.edu', 'CS');
 
 **Error:** `Duplicate entry 'alice@uni.edu' for key 'Email'`
 
-✅ **Why this is good:** Prevents duplicate accounts
+Prevents duplicate accounts
 
 
 
@@ -192,7 +192,7 @@ INSERT INTO Enrollments VALUES ('S101', 'BIO101', 'A');
 
 **Error:** `Foreign key constraint fails`
 
-✅ **Why this is good:** You can only enroll in real courses
+You can only enroll in real courses
 
 
 
@@ -204,7 +204,7 @@ DELETE FROM Majors WHERE Major = 'CS';
 
 **Error:** `Cannot delete due to foreign key constraint`
 
-✅ **Why this is good:** Protects student data from accidental deletion
+Protects student data from accidental deletion
 
 ---
 
