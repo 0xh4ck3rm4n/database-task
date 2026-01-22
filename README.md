@@ -172,7 +172,7 @@ JOIN Courses c ON e.CourseID = c.CourseID;
 
 ## Testing Conditions
 
-### ❌ Test 1: Can't Use Same Email Twice
+### Test 1: Can't Use Same Email Twice
 
 ```sql
 INSERT INTO Students VALUES ('S105', 'Eve', 'alice@uni.edu', 'CS');
@@ -184,7 +184,7 @@ INSERT INTO Students VALUES ('S105', 'Eve', 'alice@uni.edu', 'CS');
 
 ---
 
-### ❌ Test 2: Can't Enroll in Fake Course
+### Test 2: Can't Enroll in Fake Course
 
 ```sql
 INSERT INTO Enrollments VALUES ('S101', 'BIO101', 'A');
@@ -196,7 +196,7 @@ INSERT INTO Enrollments VALUES ('S101', 'BIO101', 'A');
 
 ---
 
-### ❌ Test 3: Can't Delete Major with Students
+### Test 3: Can't Delete Major with Students
 
 ```sql
 DELETE FROM Majors WHERE Major = 'CS';
