@@ -6,7 +6,6 @@
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)
 ![License](https://img.shields.io/badge/License-Educational-green)
 
----
 
 ## Learning Objective
 
@@ -16,8 +15,6 @@ You can learn the following things:
 - ✅ **Normalization**: Organizing data
 - ✅ **SQL Commands**: Writing DDL
 - ✅ **Verification**: Testing your database with queries
-
----
 
 ## Quick Start Guide
 
@@ -70,8 +67,6 @@ docker exec lab mysql -uroot -plab -t uni -e "
     ORDER BY s.Name;"
 ```
 
----
-
 ## Understanding Normalization
 
 ### First Normal Form (1NF)
@@ -99,7 +94,6 @@ docker exec lab mysql -uroot -plab -t uni -e "
   1. Created **Majors table** because Advisor depends on Major, not StudentID
   2. Now changing an advisor only requires updating one row
 
----
 
 ## Task Structure
 
@@ -114,7 +108,6 @@ database-task/
 └── README.md           # You are here!
 ```
 
----
 
 ## Results
 
@@ -206,7 +199,6 @@ DELETE FROM Majors WHERE Major = 'CS';
 
 Protects student data from accidental deletion
 
----
 
 ## Commands
 
@@ -235,7 +227,6 @@ docker stop lab
 docker rm lab
 ```
 
----
 
 ## 👨‍💻 Author
 
