@@ -109,14 +109,14 @@ SHOW TABLES;
 ```
 
 Expected output:
-<img src="/images/1.png" width="200" height="150" />
+<img src="/images/1.png" width="500" height="500" />
 
 ```sql
 SELECT * FROM Students;
 ```
 
 Expected Output:
-<img src="/images/2.png" width="200" height="150" />
+<img src="/images/2.png" width="500" height="500" />
 
 ```sql
 SELECT
@@ -138,7 +138,7 @@ JOIN Courses c ON e.CourseID = c.CourseID;
 ```
 
 Expected Output:
-<img src="/images/3.png" width="200" height="150" />
+<img src="/images/3.png" width="500" height="500" />
 
 ## Testing Data Integrity
 
